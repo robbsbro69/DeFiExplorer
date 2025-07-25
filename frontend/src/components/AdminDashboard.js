@@ -21,7 +21,6 @@ const sections = [
   { label: 'Dapps', value: 'dapps' },
   { label: 'Daily Tasks', value: 'dailytasks' },
   { label: 'Airdrop Events', value: 'airdrops' },
-  { label: 'Quests', value: 'quests' },
 ];
 
 function ChainsAdmin() {
@@ -540,148 +539,6 @@ function AirdropEventsAdmin() {
   );
 }
 
-function QuestsAdmin() {
-  const [quests, setQuests] = React.useState([]);
-  const [chains, setChains] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState('');
-  const [open, setOpen] = React.useState(false);
-  const [editQuest, setEditQuest] = React.useState(null);
-  const [form, setForm] = React.useState({ title: '', description: '', url: '', chain: '' });
-  const [saving, setSaving] = React.useState(false);
-
-  const fetchQuests = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`${API_URL}/api/quests`);
-      const data = await res.json();
-      setQuests(data);
-    } catch (err) {
-      setError('Failed to fetch quests');
-    } finally {
-      setLoading(false);
-    }
-  };
-  const fetchChains = async () => {
-    try {
-      const res = await fetch(`${API_URL}/api/chains`);
-      const data = await res.json();
-      setChains(data);
-    } catch {}
-  };
-  React.useEffect(() => { fetchQuests(); fetchChains(); }, []);
-
-  const handleOpen = (quest = null) => {
-    setEditQuest(quest);
-    setForm(quest ? { ...quest, chain: quest.chain?._id || quest.chain } : { title: '', description: '', url: '', chain: '' });
-    setOpen(true);
-  };
-  const handleClose = () => { setOpen(false); setEditQuest(null); };
-  const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
-
-  const handleSave = async () => {
-    setSaving(true);
-    setError('');
-    try {
-      const token = localStorage.getItem('adminToken');
-      const res = await fetch(`${API_URL}/api/quests${editQuest ? `/${editQuest._id}` : ''}`, {
-        method: editQuest ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(form),
-      });
-      if (!res.ok) throw new Error('Save failed');
-      handleClose();
-      fetchQuests();
-    } catch (err) {
-      setError('Failed to save quest');
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this quest?')) return;
-    setSaving(true);
-    setError('');
-    try {
-      const token = localStorage.getItem('adminToken');
-      const res = await fetch(`${API_URL}/api/quests/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error('Delete failed');
-      fetchQuests();
-    } catch (err) {
-      setError('Failed to delete quest');
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  return (
-    <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h6" color="text.primary">Quests</Typography>
-        <Button variant="contained" onClick={() => handleOpen()} sx={{ borderRadius: 2 }}>
-          Add Quest
-        </Button>
-      </Box>
-      {loading ? <CircularProgress /> : (
-        <Box>
-          {quests.length === 0 ? <Typography color="text.secondary">No quests found.</Typography> : (
-            <Box component="ul" sx={{ pl: 0, listStyle: 'none' }}>
-              {quests.map(quest => (
-                <Box key={quest._id} component="li" sx={{ mb: 2, p: 2, bgcolor: 'background.paper', borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Box>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }} color="text.primary">{quest.title}</Typography>
-                    <Typography variant="body2" color="text.secondary">{quest.chain?.name || ''}</Typography>
-                    <Typography variant="body2" color="text.secondary">{quest.description}</Typography>
-                  </Box>
-                  <Box>
-                    <IconButton onClick={() => handleOpen(quest)}><EditIcon /></IconButton>
-                    <IconButton onClick={() => handleDelete(quest._id)} color="error"><DeleteIcon /></IconButton>
-                  </Box>
-                </Box>
-              ))}
-            </Box>
-          )}
-        </Box>
-      )}
-      <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
-        <DialogTitle>{editQuest ? 'Edit Quest' : 'Add Quest'}</DialogTitle>
-        <DialogContent>
-          <TextField margin="normal" label="Title" name="title" fullWidth value={form.title} onChange={handleChange} autoFocus required />
-          <TextField margin="normal" label="Description" name="description" fullWidth value={form.description} onChange={handleChange} />
-          <TextField margin="normal" label="Quest URL" name="url" fullWidth value={form.url} onChange={handleChange} />
-          <TextField
-            margin="normal"
-            label="Chain"
-            name="chain"
-            fullWidth
-            select
-            SelectProps={{ native: true }}
-            value={form.chain}
-            onChange={handleChange}
-          >
-            <option value="">Select Chain</option>
-            {chains.map(chain => (
-              <option key={chain._id} value={chain._id}>{chain.name}</option>
-            ))}
-          </TextField>
-          {error && <Typography color="error" sx={{ mt: 1 }}>{error}</Typography>}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} disabled={saving}>Cancel</Button>
-          <Button onClick={handleSave} variant="contained" disabled={saving}>{saving ? <CircularProgress size={20} /> : 'Save'}</Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
-  );
-}
-
 export default function AdminDashboard() {
   const [tab, setTab] = React.useState('chains');
 
@@ -701,7 +558,7 @@ export default function AdminDashboard() {
         ))}
       </Tabs>
       <Box sx={{ p: 2, minHeight: 200, bgcolor: 'background.paper', borderRadius: 2 }}>
-        {tab === 'chains' ? <ChainsAdmin /> : tab === 'dapps' ? <DappsAdmin /> : tab === 'dailytasks' ? <DailyTasksAdmin /> : tab === 'airdrops' ? <AirdropEventsAdmin /> : tab === 'quests' ? <QuestsAdmin /> : (
+        {tab === 'chains' ? <ChainsAdmin /> : tab === 'dapps' ? <DappsAdmin /> : tab === 'dailytasks' ? <DailyTasksAdmin /> : tab === 'airdrops' ? <AirdropEventsAdmin /> : (
           <>
             <Typography variant="h6" sx={{ mb: 2 }}>
               {sections.find(s => s.value === tab).label}
