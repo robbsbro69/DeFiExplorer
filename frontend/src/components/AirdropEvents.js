@@ -53,10 +53,11 @@ export default function AirdropEvents() {
                     alt={event.title}
                     sx={{ 
                       width: '100%',
-                      height: 140,
-                      objectFit: 'cover',
+                      height: { xs: 140, sm: 160, md: 180 },
+                      objectFit: 'contain',
                       borderTopLeftRadius: 12,
-                      borderTopRightRadius: 12
+                      borderTopRightRadius: 12,
+                      bgcolor: '#1a1e2a'
                     }}
                   />
                 )}
