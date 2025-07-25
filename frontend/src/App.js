@@ -155,7 +155,7 @@ function App() {
       <Router>
         <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: theme.palette.background.default }}>
           <ResponsiveAppBar />
-          <Box sx={{ flex: 1, p: { xs: 1, md: 3 } }}>
+          <Box sx={{ flex: 1, p: { xs: 0.5, md: 1 } }}>
             <Routes>
               <Route path="/" element={<Explorer />} />
               <Route path="/dailytask" element={<DailyTask />} />

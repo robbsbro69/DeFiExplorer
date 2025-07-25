@@ -27,28 +27,40 @@ export default function AirdropEvents() {
   }, []);
 
   return (
-    <Box sx={{ maxWidth: 1200, mx: 'auto', mt: 4 }}>
+    <Box sx={{ mt: 4, ml: 12, mr: 2 }}>
       <Typography variant="h5" sx={{ mb: 3, fontWeight: 700 }} color="text.primary">
         Airdrop Events & Campaigns
       </Typography>
       {loading ? <CircularProgress /> : (
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           {events.length === 0 ? (
             <Typography color="text.secondary" sx={{ ml: 2 }}>No airdrop events found.</Typography>
           ) : events.map(event => (
             <Grid item xs={12} sm={6} md={4} key={event._id}>
-              <Card sx={{ borderRadius: 3, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
-                  {event.banner && (
-                    <CardMedia
-                      component="img"
-                      image={event.banner}
-                      alt={event.title}
-                      sx={{ objectFit: 'contain', width: 120, height: 80, borderRadius: 2, bgcolor: '#23283a' }}
-                    />
-                  )}
-                </Box>
-                <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
+              <Card sx={{ 
+                borderRadius: 3, 
+                height: '100%', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                overflow: 'hidden',
+                background: '#23283a',
+                boxShadow: '0 4px 24px 0 rgba(30,136,229,0.10)'
+              }}>
+                {event.banner && (
+                  <CardMedia
+                    component="img"
+                    image={event.banner}
+                    alt={event.title}
+                    sx={{ 
+                      width: '100%',
+                      height: 140,
+                      objectFit: 'cover',
+                      borderTopLeftRadius: 12,
+                      borderTopRightRadius: 12
+                    }}
+                  />
+                )}
+                <CardContent sx={{ flexGrow: 1, textAlign: 'center', px: 2, py: 2 }}>
                   <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 700 }} color="text.primary">
                     {event.title}
                   </Typography>
@@ -76,6 +88,7 @@ export default function AirdropEvents() {
                         fontSize: '1.05rem',
                         letterSpacing: '0.04em',
                         width: '100%',
+                        boxShadow: '0 2px 8px 0 rgba(30,136,229,0.10)'
                       }}
                       fullWidth
                       onClick={e => e.stopPropagation()}
