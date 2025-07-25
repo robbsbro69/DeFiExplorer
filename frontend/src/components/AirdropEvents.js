@@ -37,17 +37,18 @@ export default function AirdropEvents() {
             <Typography color="text.secondary" sx={{ ml: 2 }}>No airdrop events found.</Typography>
           ) : events.map(event => (
             <Grid item xs={12} sm={6} md={4} key={event._id}>
-              <Card sx={{ borderRadius: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
-                {event.banner && (
-                  <CardMedia
-                    component="img"
-                    height="160"
-                    image={event.banner}
-                    alt={event.title}
-                    sx={{ objectFit: 'cover', borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
-                  />
-                )}
-                <CardContent sx={{ flexGrow: 1 }}>
+              <Card sx={{ borderRadius: 3, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
+                  {event.banner && (
+                    <CardMedia
+                      component="img"
+                      image={event.banner}
+                      alt={event.title}
+                      sx={{ objectFit: 'contain', width: 120, height: 80, borderRadius: 2, bgcolor: '#23283a' }}
+                    />
+                  )}
+                </Box>
+                <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
                   <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 700 }} color="text.primary">
                     {event.title}
                   </Typography>
@@ -58,10 +59,28 @@ export default function AirdropEvents() {
                     {event.startDate ? `Start: ${event.startDate.slice(0, 10)}` : ''} {event.endDate ? `End: ${event.endDate.slice(0, 10)}` : ''}
                   </Typography>
                 </CardContent>
-                <CardActions>
+                <CardActions sx={{ p: 0 }}>
                   {event.url && (
-                    <Button size="small" color="primary" href={event.url} target="_blank" rel="noopener noreferrer" sx={{ fontWeight: 600 }}>
-                      View Event
+                    <Button
+                      size="large"
+                      color="primary"
+                      component="a"
+                      href={event.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{
+                        fontWeight: 700,
+                        borderBottomLeftRadius: 12,
+                        borderBottomRightRadius: 12,
+                        minHeight: 48,
+                        fontSize: '1.05rem',
+                        letterSpacing: '0.04em',
+                        width: '100%',
+                      }}
+                      fullWidth
+                      onClick={e => e.stopPropagation()}
+                    >
+                      VIEW EVENT
                     </Button>
                   )}
                 </CardActions>

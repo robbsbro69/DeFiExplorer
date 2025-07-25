@@ -25,17 +25,19 @@ function DappSection({ title, dapps }) {
       <Grid container spacing={2}>
         {dapps.map(dapp => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={dapp._id}>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderRadius: 3 }}>
-              {dapp.logo && (
-                <CardMedia
-                  component="img"
-                  height="120"
-                  image={dapp.logo}
-                  alt={dapp.name}
-                  sx={{ objectFit: 'contain', p: 2, bgcolor: '#23283a' }}
-                />
-              )}
-              <CardContent sx={{ flexGrow: 1 }}>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderRadius: 3, justifyContent: 'space-between' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
+                {dapp.logo && (
+                  <CardMedia
+                    component="img"
+                    height="80"
+                    image={dapp.logo}
+                    alt={dapp.name}
+                    sx={{ objectFit: 'contain', width: 80, height: 80, borderRadius: '50%', bgcolor: '#23283a' }}
+                  />
+                )}
+              </Box>
+              <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
                 <Typography gutterBottom variant="subtitle1" component="div" sx={{ fontWeight: 600 }} color="text.primary">
                   {dapp.name}
                 </Typography>
@@ -43,18 +45,27 @@ function DappSection({ title, dapps }) {
                   {dapp.description}
                 </Typography>
               </CardContent>
-              <CardActions>
+              <CardActions sx={{ p: 0 }}>
                 <Button
-                  size="small"
+                  size="large"
                   color="primary"
                   component="a"
                   href={dapp.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  sx={{ fontWeight: 600 }}
+                  sx={{
+                    fontWeight: 700,
+                    borderBottomLeftRadius: 12,
+                    borderBottomRightRadius: 12,
+                    minHeight: 48,
+                    fontSize: '1.05rem',
+                    letterSpacing: '0.04em',
+                    width: '100%',
+                  }}
+                  fullWidth
                   onClick={e => e.stopPropagation()}
                 >
-                  Visit
+                  VISIT
                 </Button>
               </CardActions>
             </Card>

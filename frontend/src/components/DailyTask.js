@@ -26,27 +26,87 @@ function TaskSection({ tasks }) {
     <Grid container spacing={2}>
       {tasks.map(task => (
         <Grid item xs={12} sm={6} md={4} lg={3} key={task._id}>
-          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderRadius: 3 }}>
-            {task.logo && (
-              <CardMedia
-                component="img"
-                height="120"
-                image={task.logo}
-                alt={task.name}
-                sx={{ objectFit: 'contain', p: 2, bgcolor: '#23283a' }}
-              />
-            )}
-            <CardContent sx={{ flexGrow: 1 }}>
-              <Typography gutterBottom variant="subtitle1" component="div" sx={{ fontWeight: 600 }}>
+          <Card
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              borderRadius: 3,
+              background: '#23283a',
+              boxShadow: '0 4px 24px 0 rgba(30,136,229,0.10)',
+              alignItems: 'center',
+              mx: 'auto',
+              my: 2,
+              overflow: 'hidden',
+              maxWidth: 200,
+              minWidth: 0,
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mt: 1.5,
+                mb: 0.5,
+              }}
+            >
+              {task.logo && (
+                <Box
+                  sx={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: '50%',
+                    background: '#181c24',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 2px 8px 0 rgba(30,136,229,0.10)',
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    image={task.logo}
+                    alt={task.name}
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      objectFit: 'contain',
+                      borderRadius: '50%',
+                    }}
+                  />
+                </Box>
+              )}
+            </Box>
+            <CardContent sx={{ flexGrow: 1, textAlign: 'center', pb: 0, px: 1 }}>
+              <Typography gutterBottom variant="subtitle1" sx={{ fontWeight: 700, fontSize: '0.98rem' }} color="text.primary">
                 {task.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, fontSize: '0.92rem' }}>
                 {task.description}
               </Typography>
             </CardContent>
-            <CardActions>
-              <Button size="small" color="primary" href={task.url} target="_blank" rel="noopener noreferrer" sx={{ fontWeight: 600 }}>
-                Visit
+            <CardActions sx={{ p: 0, width: '100%', mt: 0.5 }}>
+              <Button
+                size="small"
+                color="primary"
+                component="a"
+                href={task.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  fontWeight: 700,
+                  borderBottomLeftRadius: 10,
+                  borderBottomRightRadius: 10,
+                  minHeight: 36,
+                  fontSize: '0.98rem',
+                  letterSpacing: '0.04em',
+                  width: '100%',
+                  boxShadow: '0 2px 8px 0 rgba(30,136,229,0.10)',
+                }}
+                fullWidth
+                onClick={e => e.stopPropagation()}
+              >
+                VISIT
               </Button>
             </CardActions>
           </Card>
