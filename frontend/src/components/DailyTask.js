@@ -26,66 +26,58 @@ function TaskSection({ tasks }) {
     <Grid container spacing={2}>
       {tasks.map(task => (
         <Grid item xs={12} sm={6} md={4} lg={3} key={task._id}>
-          <Card
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              borderRadius: 3,
-              background: '#23283a',
-              boxShadow: '0 4px 24px 0 rgba(30,136,229,0.10)',
-              alignItems: 'center',
-              mx: 'auto',
-              my: 2,
+          <Card sx={{ 
+            width: '100%',
+            height: 200,
+            display: 'flex', 
+            flexDirection: 'column', 
+            borderRadius: 3, 
+            background: '#23283a',
+            boxShadow: '0 4px 24px 0 rgba(30,136,229,0.10)',
+            overflow: 'hidden',
+          }}>
+            <Box sx={{ 
+              width: '100%', 
+              height: 100,
+              background: '#1a1e2a',
               overflow: 'hidden',
-              maxWidth: 200,
-              minWidth: 0,
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mt: 1.5,
-                mb: 0.5,
-              }}
-            >
+            }}>
               {task.logo && (
-                <Box
+                <CardMedia
+                  component="img"
+                  image={task.logo}
+                  alt={task.name}
                   sx={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: '50%',
-                    background: '#181c24',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 2px 8px 0 rgba(30,136,229,0.10)',
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    borderTopLeftRadius: 12,
+                    borderTopRightRadius: 12,
                   }}
-                >
-                  <CardMedia
-                    component="img"
-                    image={task.logo}
-                    alt={task.name}
-                    sx={{
-                      width: 32,
-                      height: 32,
-                      objectFit: 'contain',
-                      borderRadius: '50%',
-                    }}
-                  />
-                </Box>
+                />
               )}
             </Box>
-            <CardContent sx={{ flexGrow: 1, textAlign: 'center', pb: 0, px: 1 }}>
-              <Typography gutterBottom variant="subtitle1" sx={{ fontWeight: 700, fontSize: '0.98rem' }} color="text.primary">
+            <CardContent sx={{ 
+              height: 64,
+              minHeight: 64,
+              maxHeight: 64,
+              textAlign: 'center', 
+              pb: 1, 
+              px: 1, 
+              py: 1, 
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              overflow: 'hidden',
+            }}>
+              <Typography gutterBottom variant="subtitle1" sx={{ fontWeight: 700, fontSize: '0.85rem', mb: 0.5 }} color="text.primary">
                 {task.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, fontSize: '0.92rem' }}>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem', lineHeight: 1.2, overflow: 'hidden' }}>
                 {task.description}
               </Typography>
             </CardContent>
-            <CardActions sx={{ p: 0, width: '100%', mt: 0.5 }}>
+            <Box sx={{ p: 0, width: '100%', height: 36, minHeight: 36, maxHeight: 36 }}>
               <Button
                 size="small"
                 color="primary"
@@ -97,8 +89,8 @@ function TaskSection({ tasks }) {
                   fontWeight: 700,
                   borderBottomLeftRadius: 10,
                   borderBottomRightRadius: 10,
-                  minHeight: 36,
-                  fontSize: '0.98rem',
+                  height: 36,
+                  fontSize: '0.85rem',
                   letterSpacing: '0.04em',
                   width: '100%',
                   boxShadow: '0 2px 8px 0 rgba(30,136,229,0.10)',
@@ -108,7 +100,7 @@ function TaskSection({ tasks }) {
               >
                 VISIT
               </Button>
-            </CardActions>
+            </Box>
           </Card>
         </Grid>
       ))}
