@@ -21,6 +21,7 @@ const sections = [
   { label: 'Dapps', value: 'dapps' },
   { label: 'Daily Tasks', value: 'dailytasks' },
   { label: 'Airdrop Events', value: 'airdrops' },
+  { label: 'Sections', value: 'sections' },
 ];
 
 function ChainsAdmin() {
@@ -290,13 +291,136 @@ function DappsAdmin() {
   );
 }
 
+function SectionsAdmin() {
+  const [sections, setSections] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState('');
+  const [open, setOpen] = React.useState(false);
+  const [editSection, setEditSection] = React.useState(null);
+  const [form, setForm] = React.useState({ name: '', type: 'faucet', description: '', order: 0 });
+  const [saving, setSaving] = React.useState(false);
+
+  const fetchSections = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/api/sections`);
+      const data = await res.json();
+      setSections(data);
+    } catch (err) {
+      setError('Failed to fetch sections');
+    } finally {
+      setLoading(false);
+    }
+  };
+  React.useEffect(() => { fetchSections(); }, []);
+
+  const handleOpen = (section = null) => {
+    setEditSection(section);
+    setForm(section ? { ...section } : { name: '', type: 'faucet', description: '', order: 0 });
+    setOpen(true);
+  };
+  const handleClose = () => { setOpen(false); setEditSection(null); };
+  const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+
+  const handleSave = async () => {
+    setSaving(true);
+    setError('');
+    try {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(`${API_URL}/api/sections${editSection ? `/${editSection._id}` : ''}`, {
+        method: editSection ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error('Save failed');
+      handleClose();
+      fetchSections();
+    } catch (err) {
+      setError('Failed to save section');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Delete this section?')) return;
+    setSaving(true);
+    setError('');
+    try {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(`${API_URL}/api/sections/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error('Delete failed');
+      fetchSections();
+    } catch (err) {
+      setError('Failed to delete section');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h6" color="text.primary">Sections</Typography>
+        <Button variant="contained" onClick={() => handleOpen()} sx={{ borderRadius: 2 }}>
+          Add Section
+        </Button>
+      </Box>
+      {loading ? <CircularProgress /> : (
+        <Box>
+          {sections.length === 0 ? <Typography color="text.secondary">No sections found.</Typography> : (
+            <Box component="ul" sx={{ pl: 0, listStyle: 'none' }}>
+              {sections.map(section => (
+                <Box key={section._id} component="li" sx={{ mb: 2, p: 2, bgcolor: 'background.paper', borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Box>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }} color="text.primary">{section.name}</Typography>
+                    <Typography variant="body2" color="text.secondary">{section.type} | Order: {section.order}</Typography>
+                    <Typography variant="body2" color="text.secondary">{section.description}</Typography>
+                  </Box>
+                  <Box>
+                    <IconButton onClick={() => handleOpen(section)}><EditIcon /></IconButton>
+                    <IconButton onClick={() => handleDelete(section._id)} color="error"><DeleteIcon /></IconButton>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          )}
+        </Box>
+      )}
+      <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
+        <DialogTitle>{editSection ? 'Edit Section' : 'Add Section'}</DialogTitle>
+        <DialogContent>
+          <TextField margin="normal" label="Name" name="name" fullWidth value={form.name} onChange={handleChange} autoFocus required />
+          <TextField margin="normal" label="Type" name="type" fullWidth select SelectProps={{ native: true }} value={form.type} onChange={handleChange} required>
+            <option value="faucet">Faucet</option>
+          </TextField>
+          <TextField margin="normal" label="Description" name="description" fullWidth value={form.description} onChange={handleChange} />
+          <TextField margin="normal" label="Order" name="order" type="number" fullWidth value={form.order} onChange={handleChange} />
+          {error && <Typography color="error" sx={{ mt: 1 }}>{error}</Typography>}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} disabled={saving}>Cancel</Button>
+          <Button onClick={handleSave} variant="contained" disabled={saving}>{saving ? <CircularProgress size={20} /> : 'Save'}</Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
+  );
+}
+
 function DailyTasksAdmin() {
   const [tasks, setTasks] = React.useState([]);
+  const [sections, setSections] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [editTask, setEditTask] = React.useState(null);
-  const [form, setForm] = React.useState({ type: '', name: '', url: '', description: '', logo: '' });
+  const [form, setForm] = React.useState({ type: '', name: '', url: '', description: '', logo: '', sectionId: '' });
   const [saving, setSaving] = React.useState(false);
 
   const fetchTasks = async () => {
@@ -311,11 +435,18 @@ function DailyTasksAdmin() {
       setLoading(false);
     }
   };
-  React.useEffect(() => { fetchTasks(); }, []);
+  const fetchSections = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/sections`);
+      const data = await res.json();
+      setSections(data);
+    } catch {}
+  };
+  React.useEffect(() => { fetchTasks(); fetchSections(); }, []);
 
   const handleOpen = (task = null) => {
     setEditTask(task);
-    setForm(task ? { ...task } : { type: '', name: '', url: '', description: '', logo: '' });
+    setForm(task ? { ...task, sectionId: task.sectionId?._id || task.sectionId } : { type: '', name: '', url: '', description: '', logo: '', sectionId: '' });
     setOpen(true);
   };
   const handleClose = () => { setOpen(false); setEditTask(null); };
@@ -379,7 +510,7 @@ function DailyTasksAdmin() {
                 <Box key={task._id} component="li" sx={{ mb: 2, p: 2, bgcolor: 'background.paper', borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Box>
                     <Typography variant="subtitle1" sx={{ fontWeight: 600 }} color="text.primary">{task.name}</Typography>
-                    <Typography variant="body2" color="text.secondary">{task.type}</Typography>
+                    <Typography variant="body2" color="text.secondary">{task.type} {task.sectionId?.name ? `| ${task.sectionId.name}` : ''}</Typography>
                     <Typography variant="body2" color="text.secondary">{task.description}</Typography>
                   </Box>
                   <Box>
@@ -406,6 +537,21 @@ function DailyTasksAdmin() {
           <TextField margin="normal" label="URL" name="url" fullWidth value={form.url} onChange={handleChange} required />
           <TextField margin="normal" label="Description" name="description" fullWidth value={form.description} onChange={handleChange} />
           <TextField margin="normal" label="Logo URL" name="logo" fullWidth value={form.logo} onChange={handleChange} />
+          <TextField
+            margin="normal"
+            label="Section"
+            name="sectionId"
+            fullWidth
+            select
+            SelectProps={{ native: true }}
+            value={form.sectionId}
+            onChange={handleChange}
+          >
+            <option value="">Select Section (Optional)</option>
+            {sections.map(section => (
+              <option key={section._id} value={section._id}>{section.name}</option>
+            ))}
+          </TextField>
           {error && <Typography color="error" sx={{ mt: 1 }}>{error}</Typography>}
         </DialogContent>
         <DialogActions>
@@ -558,7 +704,7 @@ export default function AdminDashboard() {
         ))}
       </Tabs>
       <Box sx={{ p: 2, minHeight: 200, bgcolor: 'background.paper', borderRadius: 2 }}>
-        {tab === 'chains' ? <ChainsAdmin /> : tab === 'dapps' ? <DappsAdmin /> : tab === 'dailytasks' ? <DailyTasksAdmin /> : tab === 'airdrops' ? <AirdropEventsAdmin /> : (
+        {tab === 'chains' ? <ChainsAdmin /> : tab === 'dapps' ? <DappsAdmin /> : tab === 'dailytasks' ? <DailyTasksAdmin /> : tab === 'airdrops' ? <AirdropEventsAdmin /> : tab === 'sections' ? <SectionsAdmin /> : (
           <>
             <Typography variant="h6" sx={{ mb: 2 }}>
               {sections.find(s => s.value === tab).label}
