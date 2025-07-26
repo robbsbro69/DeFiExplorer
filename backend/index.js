@@ -9,6 +9,7 @@ const dappRoutes = require('./routes/dapp');
 const dailyTaskRoutes = require('./routes/dailytask');
 const airdropEventRoutes = require('./routes/airdropevent');
 const questRoutes = require('./routes/quest');
+const sectionRoutes = require('./routes/section');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -36,6 +37,7 @@ app.use('/api/dapps', dappRoutes);
 app.use('/api/dailytasks', dailyTaskRoutes);
 app.use('/api/airdropevents', airdropEventRoutes);
 app.use('/api/quests', questRoutes);
+app.use('/api/sections', sectionRoutes);
 
 // Start server
 app.listen(PORT, () => {

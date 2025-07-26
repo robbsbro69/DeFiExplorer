@@ -6,6 +6,7 @@ const DailyTaskSchema = new mongoose.Schema({
   url: { type: String, required: true },
   description: { type: String },
   logo: { type: String },
+  sectionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Section' }, // Reference to Section model
   createdAt: { type: Date, default: Date.now }
 });
 

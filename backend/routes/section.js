@@ -1,5 +1,5 @@
 const express = require('express');
-const DailyTask = require('../models/DailyTask');
+const Section = require('../models/Section');
 const jwt = require('jsonwebtoken');
 
 const router = express.Router();
@@ -18,38 +18,38 @@ function auth(req, res, next) {
   }
 }
 
-// Get all daily tasks (optionally filter by type)
+// Get all sections
 router.get('/', async (req, res) => {
   const { type } = req.query;
   const filter = {};
   if (type) filter.type = type;
-  const tasks = await DailyTask.find(filter).populate('sectionId');
-  res.json(tasks);
+  const sections = await Section.find(filter).sort({ order: 1 });
+  res.json(sections);
 });
 
-// Create daily task (admin only)
+// Create section (admin only)
 router.post('/', auth, async (req, res) => {
-  const { type, name, url, description, logo, sectionId } = req.body;
-  const task = new DailyTask({ type, name, url, description, logo, sectionId });
-  await task.save();
-  res.json(task);
+  const { name, type, description, order } = req.body;
+  const section = new Section({ name, type, description, order });
+  await section.save();
+  res.json(section);
 });
 
-// Update daily task (admin only)
+// Update section (admin only)
 router.put('/:id', auth, async (req, res) => {
-  const { type, name, url, description, logo, sectionId } = req.body;
-  const task = await DailyTask.findByIdAndUpdate(
+  const { name, type, description, order } = req.body;
+  const section = await Section.findByIdAndUpdate(
     req.params.id,
-    { type, name, url, description, logo, sectionId },
+    { name, type, description, order },
     { new: true }
   );
-  res.json(task);
+  res.json(section);
 });
 
-// Delete daily task (admin only)
+// Delete section (admin only)
 router.delete('/:id', auth, async (req, res) => {
-  await DailyTask.findByIdAndDelete(req.params.id);
-  res.json({ message: 'Daily task deleted' });
+  await Section.findByIdAndDelete(req.params.id);
+  res.json({ message: 'Section deleted' });
 });
 
 module.exports = router; 
