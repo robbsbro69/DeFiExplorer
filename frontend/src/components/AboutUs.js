@@ -20,14 +20,14 @@ export default function AboutUs() {
     },
     { 
       name: 'Twitter', 
-      url: 'https://twitter.com/defiexplorer', 
-      label: '@defiexplorer',
+      url: 'https://x.com/robbsbro369', 
+      label: '@robbsbro369',
       icon: <Twitter sx={{ fontSize: 20 }} />
     },
     { 
       name: 'Telegram', 
-      url: 'https://t.me/defiexplorer', 
-      label: 't.me/defiexplorer',
+      url: 'https://t.me/robbs12', 
+      label: 't.me/robbs12',
       icon: <Telegram sx={{ fontSize: 20 }} />
     }
   ];
