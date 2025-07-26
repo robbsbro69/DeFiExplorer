@@ -141,12 +141,17 @@ function LeftSidebar() {
   return (
     <Box sx={{ 
       width: 280, 
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      bottom: 0,
       height: '100vh',
       background: '#1e293b',
       borderRight: '1px solid rgba(148, 163, 184, 0.1)',
       display: 'flex',
       flexDirection: 'column',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      zIndex: 1200
     }}>
       {/* Logo/Title Section */}
       <Box sx={{ p: 3, borderBottom: '1px solid rgba(148, 163, 184, 0.1)' }}>
@@ -239,7 +244,7 @@ function App() {
           {sidebarOpen && <LeftSidebar />}
           
           {/* Main Content */}
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', ml: sidebarOpen ? '280px' : 0, transition: 'margin-left 0.3s' }}>
             {/* Sidebar Toggle Button */}
             <Box sx={{ 
               position: 'fixed', 
