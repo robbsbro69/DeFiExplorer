@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Box, AppBar, Toolbar, Typography, Button, Container, useTheme, useMediaQuery, IconButton, Drawer, List, ListItem, ListItemText, ListItemIcon, Paper, Avatar, Chip, Badge, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { Menu as MenuIcon, Explore, Task, FlightTakeoff, Info, AdminPanelSettings, Close, Search, AccountBalance, Star, TrendingUp, Group, EmojiEvents, PlayArrow, Rocket, Lock, SwapHoriz, KeyboardArrowDown } from '@mui/icons-material';
+import { Menu as MenuIcon, Explore, Task, FlightTakeoff, Info, AdminPanelSettings, Close, Search, AccountBalance, Star, TrendingUp, Group, EmojiEvents, PlayArrow, Rocket, Lock, SwapHoriz, KeyboardArrowDown, ChevronLeft, ChevronRight } from '@mui/icons-material';
 import Explorer from './components/Explorer';
 import DailyTask from './components/DailyTask';
 import AirdropEvents from './components/AirdropEvents';
@@ -220,6 +220,12 @@ function LeftSidebar() {
 }
 
 function App() {
+  const [sidebarOpen, setSidebarOpen] = React.useState(true);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
@@ -230,10 +236,34 @@ function App() {
           position: 'relative'
         }}>
           {/* Left Sidebar */}
-          <LeftSidebar />
+          {sidebarOpen && <LeftSidebar />}
           
           {/* Main Content */}
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            {/* Sidebar Toggle Button */}
+            <Box sx={{ 
+              position: 'fixed', 
+              top: 20, 
+              left: sidebarOpen ? 290 : 20, 
+              zIndex: 1000,
+              transition: 'left 0.3s ease-in-out'
+            }}>
+              <IconButton
+                onClick={toggleSidebar}
+                sx={{
+                  background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                  color: 'white',
+                  boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #1d4ed8, #3b82f6)',
+                    transform: 'scale(1.05)',
+                    boxShadow: '0 6px 16px rgba(59, 130, 246, 0.4)'
+                  }
+                }}
+              >
+                {sidebarOpen ? <ChevronLeft /> : <ChevronRight />}
+              </IconButton>
+            </Box>
             <Box sx={{ 
               flex: 1, 
               p: 3,
