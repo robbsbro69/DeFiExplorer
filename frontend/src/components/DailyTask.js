@@ -93,8 +93,9 @@ function TaskSection({ tasks, type }) {
           {filteredFaucets.map(task => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={task._id}>
               <Card sx={{ 
-                width: '100%',
-                height: 230,
+                width: 220,
+                height: 220,
+                mx: 'auto',
                 borderRadius: 2,
                 p: 2,
                 background: 'linear-gradient(135deg, rgba(30,41,59,0.85) 0%, rgba(51,65,85,0.85) 100%)',
@@ -140,17 +141,16 @@ function TaskSection({ tasks, type }) {
                 }} />
                 
                 <Box sx={{ 
-                  width: '100%', 
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  mt: 1,
+                  mb: 1,
                   height: 110,
                   background: 'rgba(30,41,59,0.92)',
                   overflow: 'hidden',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
+                  position: 'relative',
                   zIndex: 1
                 }}>
                   {task.logo ? (
@@ -159,26 +159,27 @@ function TaskSection({ tasks, type }) {
                       image={task.logo}
                       alt={task.name}
                       sx={{
-                        width: 64,
-                        height: 64,
-                        objectFit: 'cover',
+                        width: 80,
+                        height: 80,
+                        objectFit: 'contain',
                         borderRadius: '50%',
                         border: '2.5px solid #3b82f6',
                         boxShadow: '0 4px 16px 0 rgba(59,130,246,0.18)',
-                        background: 'white',
+                        background: 'rgba(255,255,255,0.9)',
+                        padding: '4px',
                       }}
                     />
                   ) : (
                     <Box sx={{
-                      width: 64,
-                      height: 64,
+                      width: 80,
+                      height: 80,
                       borderRadius: '50%',
                       background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       color: 'white',
-                      fontSize: '2rem',
+                      fontSize: '2.3rem',
                       fontWeight: 700,
                       boxShadow: '0 4px 16px 0 rgba(59,130,246,0.18)',
                     }}>
@@ -187,56 +188,25 @@ function TaskSection({ tasks, type }) {
                   )}
                 </Box>
                 <CardContent sx={{ 
-                  flex: 0,
-                  minHeight: 44,
-                  maxHeight: 60,
-                  textAlign: 'center', 
-                  pb: 0.5, 
-                  px: 1.5, 
-                  pt: 0.5,
+                  flexGrow: 1,
+                  minHeight: 56,
+                  maxHeight: 90,
+                  textAlign: 'center',
+                  p: 0,
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
-                  alignItems: 'center',
                   overflow: 'hidden',
-                  gap: 0.22,
-                  mt: 13.75,
+                  alignItems: 'center',
                 }}>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{
-                      fontWeight: 700,
-                      fontSize: '1.02rem',
-                      mb: 0.2,
-                      color: '#f1f5f9',
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden',
-                      whiteSpace: 'nowrap',
-                      width: '100%',
-                    }}
-                  >
+                  <Typography gutterBottom variant="subtitle1" sx={{ fontWeight: 700, fontSize: '0.95rem', mb: 0.2, width: '100%', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }} color="text.primary">
                     {task.name}
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    color="#94a3b8"
-                    sx={{
-                      fontSize: '0.92rem',
-                      lineHeight: 1.22,
-                      maxHeight: '2.44em',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      whiteSpace: 'normal',
-                      width: '100%',
-                    }}
-                  >
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.8rem', lineHeight: 1.25, width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', whiteSpace: 'normal' }}>
                     {task.description}
                   </Typography>
                 </CardContent>
-                <Box sx={{ p: 0, width: '100%', height: 44, minHeight: 44, maxHeight: 44, mt: 'auto' }}>
+                <Box sx={{ p: 0, width: '100%', height: 44, minHeight: 44, maxHeight: 44 }}>
                   <Button
                     size="medium"
                     color="primary"
@@ -246,23 +216,18 @@ function TaskSection({ tasks, type }) {
                     rel="noopener noreferrer"
                     sx={{
                       fontWeight: 700,
-                      borderRadius: 0,
+                      borderBottomLeftRadius: 12,
+                      borderBottomRightRadius: 12,
                       height: 44,
-                      fontSize: '1.02rem',
+                      fontSize: '0.95rem',
                       letterSpacing: '0.04em',
                       width: '100%',
-                      background: 'linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%)',
+                      background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
                       color: 'white',
-                      boxShadow: '0 4px 16px 0 rgba(59,130,246,0.10)',
-                      transition: 'all 0.2s',
-                      position: 'absolute',
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      m: 0,
                       '&:hover': {
-                        background: 'linear-gradient(90deg, #1d4ed8 0%, #3b82f6 100%)',
-                        boxShadow: '0 8px 32px 0 rgba(59,130,246,0.18)',
+                        background: 'linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%)',
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 10px 20px -5px rgba(59, 130, 246, 0.4)'
                       }
                     }}
                     fullWidth
@@ -281,15 +246,19 @@ function TaskSection({ tasks, type }) {
 
   // For other task types, use the original layout
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={1.5}>
       {tasks.map(task => (
         <Grid item xs={12} sm={6} md={4} lg={3} key={task._id}>
           <Card sx={{ 
-            width: '100%',
+            width: 220,
             height: 220,
-            display: 'flex', 
-            flexDirection: 'column', 
-            borderRadius: 3,
+            mx: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderRadius: 2,
+            p: 2,
             background: 'linear-gradient(145deg, #1e293b 0%, #334155 100%)',
             border: '1px solid rgba(148, 163, 184, 0.1)',
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
@@ -332,13 +301,15 @@ function TaskSection({ tasks, type }) {
             }} />
             
             <Box sx={{ 
-              width: '100%', 
-              height: 140,
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              mt: 1,
+              mb: 1,
+              height: 110,
               background: '#1a1e2a',
               overflow: 'hidden',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
             }}>
               {task.logo ? (
                 <CardMedia
@@ -346,11 +317,14 @@ function TaskSection({ tasks, type }) {
                   image={task.logo}
                   alt={task.name}
                   sx={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    borderTopLeftRadius: 12,
-                    borderTopRightRadius: 12,
+                    width: 80,
+                    height: 80,
+                    objectFit: 'contain',
+                    borderRadius: '50%',
+                    border: '2.5px solid #3b82f6',
+                    boxShadow: '0 4px 16px 0 rgba(59,130,246,0.18)',
+                    background: 'rgba(255,255,255,0.9)',
+                    padding: '4px',
                   }}
                 />
               ) : (
@@ -363,34 +337,34 @@ function TaskSection({ tasks, type }) {
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: 'white',
-                  fontSize: '2rem',
-                  fontWeight: 700
+                  fontSize: '2.3rem',
+                  fontWeight: 700,
+                  boxShadow: '0 4px 16px 0 rgba(59,130,246,0.18)',
                 }}>
                   {task.name.charAt(0)}
                 </Box>
               )}
             </Box>
             <CardContent sx={{ 
-              height: 64,
-              minHeight: 64,
-              maxHeight: 64,
+              flexGrow: 1,
+              minHeight: 56,
+              maxHeight: 90,
               textAlign: 'center', 
-              pb: 1, 
-              px: 2, 
-              py: 2, 
+              p: 0,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
               overflow: 'hidden',
+              alignItems: 'center',
             }}>
-              <Typography gutterBottom variant="subtitle1" sx={{ fontWeight: 700, fontSize: '0.9rem', mb: 0.5 }} color="text.primary">
+              <Typography gutterBottom variant="subtitle1" sx={{ fontWeight: 700, fontSize: '0.95rem', mb: 0.2, width: '100%', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }} color="text.primary">
                 {task.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem', lineHeight: 1.2, overflow: 'hidden' }}>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.8rem', lineHeight: 1.25, width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', whiteSpace: 'normal' }}>
                 {task.description}
               </Typography>
             </CardContent>
-            <Box sx={{ p: 0, width: '100%', height: 48, minHeight: 48, maxHeight: 48 }}>
+            <Box sx={{ p: 0, width: '100%', height: 44, minHeight: 44, maxHeight: 44 }}>
               <Button
                 size="medium"
                 color="primary"
@@ -402,8 +376,8 @@ function TaskSection({ tasks, type }) {
                   fontWeight: 700,
                   borderBottomLeftRadius: 12,
                   borderBottomRightRadius: 12,
-                  height: 48,
-                  fontSize: '0.9rem',
+                  height: 44,
+                  fontSize: '0.95rem',
                   letterSpacing: '0.04em',
                   width: '100%',
                   background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',

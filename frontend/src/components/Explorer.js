@@ -75,11 +75,15 @@ function DappSection({ title, dapps, icon: Icon }) {
         {dapps.map(dapp => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={dapp._id}>
             <Card sx={{ 
-              height: '100%', 
-              display: 'flex', 
-              flexDirection: 'column', 
-              borderRadius: 3,
+              width: 220,
+              height: 220,
+              mx: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
               justifyContent: 'space-between',
+              alignItems: 'center',
+              borderRadius: 2,
+              p: 2,
               background: 'linear-gradient(145deg, #1e293b 0%, #334155 100%)',
               border: '1px solid rgba(148, 163, 184, 0.1)',
               boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
@@ -122,43 +126,41 @@ function DappSection({ title, dapps, icon: Icon }) {
               }} />
               
               <Box sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                pt: 4,
-                pb: 3
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                mt: 1,
+                mb: 1,
+                height: 110,
               }}>
                 {dapp.logo ? (
                   <CardMedia
                     component="img"
-                    height="80"
                     image={dapp.logo}
                     alt={dapp.name}
                     sx={{ 
-                      objectFit: 'contain', 
-                      width: 80, 
-                      height: 80, 
-                      borderRadius: '50%', 
-                      bgcolor: 'rgba(30, 41, 59, 0.5)',
-                      border: '2px solid rgba(59, 130, 246, 0.3)',
-                      transition: 'all 0.3s ease-in-out',
-                      '&:hover': {
-                        border: '2px solid rgba(59, 130, 246, 0.6)',
-                        transform: 'scale(1.05)'
-                      }
+                     width: 80,
+                     height: 80,
+                     objectFit: 'contain',
+                     borderRadius: '50%',
+                     border: '2.5px solid #3b82f6',
+                     boxShadow: '0 4px 16px 0 rgba(59,130,246,0.18)',
+                     background: 'rgba(255,255,255,0.9)',
+                     padding: '4px',
                     }}
                   />
                 ) : (
                   <Box sx={{
-                    width: 80,
-                    height: 80,
+                   width: 80,
+                   height: 80,
                     borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #3b82f6, #f59e0b)',
+                   background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: 'white',
-                    fontSize: '2rem',
+                   fontSize: '2.3rem',
                     fontWeight: 700
                   }}>
                     {dapp.name.charAt(0)}
@@ -166,63 +168,56 @@ function DappSection({ title, dapps, icon: Icon }) {
                 )}
               </Box>
               
-              <CardContent sx={{ flexGrow: 1, textAlign: 'center', pb: 3, px: 3 }}>
-                <Typography 
-                  gutterBottom 
-                  variant="h6" 
-                  component="div" 
-                  sx={{ 
-                    fontWeight: 700,
-                    color: 'text.primary',
-                    mb: 1,
-                    fontSize: '1.1rem'
-                  }}
-                >
+              <CardContent sx={{
+                flexGrow: 1,
+                minHeight: 56,
+                maxHeight: 90,
+                textAlign: 'center',
+                p: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                alignItems: 'center',
+              }}>
+                <Typography gutterBottom variant="subtitle1" sx={{ fontWeight: 700, fontSize: '0.95rem', mb: 0.2, width: '100%', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }} color="text.primary">
                   {dapp.name}
                 </Typography>
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary"
-                  sx={{ 
-                    lineHeight: 1.5,
-                    fontSize: '0.875rem'
-                  }}
-                >
+                <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.8rem', lineHeight: 1.25, width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', whiteSpace: 'normal' }}>
                   {dapp.description}
                 </Typography>
               </CardContent>
               
-              <CardActions sx={{ p: 0 }}>
+              <Box sx={{ p: 0, width: '100%', height: 44, minHeight: 44, maxHeight: 44 }}>
                 <Button
-                  size="large"
+                  size="medium"
                   color="primary"
                   component="a"
                   href={dapp.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   sx={{
-                    fontWeight: 600,
-                    textTransform: 'none',
-                    letterSpacing: '0.025em',
-                    width: '100%',
+                    fontWeight: 700,
                     borderBottomLeftRadius: 12,
                     borderBottomRightRadius: 12,
-                    minHeight: 56,
-                    fontSize: '1rem',
+                    height: 44,
+                    fontSize: '0.95rem',
+                    letterSpacing: '0.04em',
+                    width: '100%',
                     background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
                     color: 'white',
                     '&:hover': {
                       background: 'linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%)',
                       transform: 'translateY(-2px)',
-                      boxShadow: '0 10px 20px -5px rgba(59, 130, 246, 0.3)'
+                      boxShadow: '0 10px 20px -5px rgba(59, 130, 246, 0.4)'
                     }
                   }}
                   fullWidth
                   onClick={e => e.stopPropagation()}
                 >
-                  VISIT DAPP
+                  VISIT
                 </Button>
-              </CardActions>
+              </Box>
             </Card>
           </Grid>
         ))}
