@@ -26,18 +26,18 @@ router.get('/', async (req, res) => {
 
 // Create chain (admin only)
 router.post('/', auth, async (req, res) => {
-  const { name, logo, type, description } = req.body;
-  const chain = new Chain({ name, logo, type, description });
+  const { name, type, description } = req.body;
+  const chain = new Chain({ name, type, description });
   await chain.save();
   res.json(chain);
 });
 
 // Update chain (admin only)
 router.put('/:id', auth, async (req, res) => {
-  const { name, logo, type, description } = req.body;
+  const { name, type, description } = req.body;
   const chain = await Chain.findByIdAndUpdate(
     req.params.id,
-    { name, logo, type, description },
+    { name, type, description },
     { new: true }
   );
   res.json(chain);

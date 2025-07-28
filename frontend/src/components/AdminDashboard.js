@@ -13,6 +13,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import CircularProgress from '@mui/material/CircularProgress';
+import AdminLogin from './AdminLogin';
 
 const API_URL = process.env.REACT_APP_API_URL || '';
 
@@ -30,7 +31,7 @@ function ChainsAdmin() {
   const [error, setError] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [editChain, setEditChain] = React.useState(null);
-  const [form, setForm] = React.useState({ name: '', logo: '', type: '', description: '' });
+  const [form, setForm] = React.useState({ name: '', type: '', description: '' });
   const [saving, setSaving] = React.useState(false);
 
   const fetchChains = async () => {
@@ -50,7 +51,7 @@ function ChainsAdmin() {
 
   const handleOpen = (chain = null) => {
     setEditChain(chain);
-    setForm(chain ? { ...chain } : { name: '', logo: '', type: '', description: '' });
+    setForm(chain ? { ...chain } : { name: '', type: '', description: '' });
     setOpen(true);
   };
   const handleClose = () => { setOpen(false); setEditChain(null); };
@@ -132,7 +133,6 @@ function ChainsAdmin() {
         <DialogTitle>{editChain ? 'Edit Chain' : 'Add Chain'}</DialogTitle>
         <DialogContent>
           <TextField margin="normal" label="Name" name="name" fullWidth value={form.name} onChange={handleChange} autoFocus required />
-          <TextField margin="normal" label="Logo URL" name="logo" fullWidth value={form.logo} onChange={handleChange} />
           <TextField margin="normal" label="Type" name="type" fullWidth value={form.type} onChange={handleChange} />
           <TextField margin="normal" label="Description" name="description" fullWidth value={form.description} onChange={handleChange} />
           {error && <Typography color="error" sx={{ mt: 1 }}>{error}</Typography>}
@@ -687,9 +687,45 @@ function AirdropEventsAdmin() {
 
 export default function AdminDashboard() {
   const [tab, setTab] = React.useState('chains');
+  const [isAuthenticated, setIsAuthenticated] = React.useState(!!localStorage.getItem('adminToken'));
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []);
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('adminToken');
+    setIsAuthenticated(false);
+  };
+
+  if (!isAuthenticated) {
+    return <AdminLogin onLogin={handleLogin} />;
+  }
 
   return (
     <Box sx={{ width: '100%', mt: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, background: 'linear-gradient(135deg, #3b82f6, #f59e0b)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          Admin Dashboard
+        </Typography>
+        <Button 
+          variant="outlined" 
+          color="error" 
+          onClick={handleLogout}
+          sx={{ borderRadius: 2 }}
+        >
+          Logout
+        </Button>
+      </Box>
       <Tabs
         value={tab}
         onChange={(_, v) => setTab(v)}
