@@ -155,6 +155,22 @@ function DappsAdmin() {
   const [editDapp, setEditDapp] = React.useState(null);
   const [form, setForm] = React.useState({ name: '', url: '', type: '', chain: '', description: '', logo: '' });
   const [saving, setSaving] = React.useState(false);
+  const [filterChain, setFilterChain] = React.useState('');
+  const [filterType, setFilterType] = React.useState('');
+
+  // Predefined dapp types for dropdown
+  const dappTypes = [
+    { value: 'dex', label: 'DEX' },
+    { value: 'lending', label: 'Lending Protocol' },
+    { value: 'nft', label: 'NFT Marketplace' },
+    { value: 'bridge', label: 'Bridge' },
+    { value: 'faucet', label: 'Faucet' },
+    { value: 'derivatives', label: 'Derivatives' },
+    { value: 'gaming', label: 'Gaming' },
+    { value: 'social', label: 'Social' },
+    { value: 'yield', label: 'Yield Farming' },
+    { value: 'other', label: 'Other' }
+  ];
 
   const fetchDapps = async () => {
     setLoading(true);
@@ -227,6 +243,13 @@ function DappsAdmin() {
     }
   };
 
+  // Filter dapps based on selected chain and type
+  const filteredDapps = dapps.filter(dapp => {
+    const chainMatch = !filterChain || dapp.chain?._id === filterChain || dapp.chain === filterChain;
+    const typeMatch = !filterType || dapp.type.toLowerCase() === filterType.toLowerCase();
+    return chainMatch && typeMatch;
+  });
+
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -235,11 +258,78 @@ function DappsAdmin() {
           Add Dapp
         </Button>
       </Box>
+      
+      {/* Filter Section */}
+      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+        <TextField
+          select
+          label="Filter by Chain"
+          value={filterChain}
+          onChange={(e) => setFilterChain(e.target.value)}
+          sx={{ 
+            minWidth: 200,
+            '& .MuiSelect-select': {
+              padding: '12px 14px',
+              fontSize: '14px',
+              lineHeight: '1.5'
+            }
+          }}
+          SelectProps={{ 
+            native: true,
+            style: { fontSize: '14px', padding: '8px' }
+          }}
+        >
+          <option value="" style={{ padding: '8px', fontSize: '14px' }}>All Chains</option>
+          {chains.map(chain => (
+            <option key={chain._id} value={chain._id} style={{ padding: '8px', fontSize: '14px' }}>{chain.name}</option>
+          ))}
+        </TextField>
+        
+        <TextField
+          select
+          label="Filter by Type"
+          value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
+          sx={{ 
+            minWidth: 200,
+            '& .MuiSelect-select': {
+              padding: '12px 14px',
+              fontSize: '14px',
+              lineHeight: '1.5'
+            }
+          }}
+          SelectProps={{ 
+            native: true,
+            style: { fontSize: '14px', padding: '8px' }
+          }}
+        >
+          <option value="" style={{ padding: '8px', fontSize: '14px' }}>All Types</option>
+          {dappTypes.map(type => (
+            <option key={type.value} value={type.value} style={{ padding: '8px', fontSize: '14px' }}>{type.label}</option>
+          ))}
+        </TextField>
+        
+        <Button 
+          variant="outlined" 
+          onClick={() => { setFilterChain(''); setFilterType(''); }}
+          sx={{ borderRadius: 2 }}
+        >
+          Clear Filters
+        </Button>
+        
+        <Typography variant="body2" color="text.secondary" sx={{ alignSelf: 'center' }}>
+          Showing {filteredDapps.length} of {dapps.length} dapps
+        </Typography>
+      </Box>
       {loading ? <CircularProgress /> : (
         <Box>
-          {dapps.length === 0 ? <Typography color="text.secondary">No dapps found.</Typography> : (
+          {filteredDapps.length === 0 ? (
+            <Typography color="text.secondary">
+              {dapps.length === 0 ? 'No dapps found.' : 'No dapps match the selected filters.'}
+            </Typography>
+          ) : (
             <Box component="ul" sx={{ pl: 0, listStyle: 'none' }}>
-              {dapps.map(dapp => (
+              {filteredDapps.map(dapp => (
                 <Box key={dapp._id} component="li" sx={{ mb: 2, p: 2, bgcolor: 'background.paper', borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Box>
                     <Typography variant="subtitle1" sx={{ fontWeight: 600 }} color="text.primary">{dapp.name}</Typography>
@@ -261,25 +351,60 @@ function DappsAdmin() {
         <DialogContent>
           <TextField margin="normal" label="Name" name="name" fullWidth value={form.name} onChange={handleChange} autoFocus required />
           <TextField margin="normal" label="URL" name="url" fullWidth value={form.url} onChange={handleChange} required />
-          <TextField margin="normal" label="Type (DEX, Lending, NFT, Bridge, Faucet, etc.)" name="type" fullWidth value={form.type} onChange={handleChange} required />
-          <TextField margin="normal" label="Description" name="description" fullWidth value={form.description} onChange={handleChange} />
-          <TextField margin="normal" label="Logo URL" name="logo" fullWidth value={form.logo} onChange={handleChange} />
+          <TextField
+            margin="normal"
+            label="Type"
+            name="type"
+            fullWidth
+            select
+            sx={{
+              '& .MuiSelect-select': {
+                padding: '12px 14px',
+                fontSize: '14px',
+                lineHeight: '1.5'
+              }
+            }}
+            SelectProps={{ 
+              native: true,
+              style: { fontSize: '14px', padding: '8px' }
+            }}
+            value={form.type}
+            onChange={handleChange}
+            required
+          >
+            <option value="" style={{ padding: '8px', fontSize: '14px' }}>Select Type</option>
+            {dappTypes.map(type => (
+              <option key={type.value} value={type.value} style={{ padding: '8px', fontSize: '14px' }}>{type.label}</option>
+            ))}
+          </TextField>
           <TextField
             margin="normal"
             label="Chain"
             name="chain"
             fullWidth
             select
-            SelectProps={{ native: true }}
+            sx={{
+              '& .MuiSelect-select': {
+                padding: '12px 14px',
+                fontSize: '14px',
+                lineHeight: '1.5'
+              }
+            }}
+            SelectProps={{ 
+              native: true,
+              style: { fontSize: '14px', padding: '8px' }
+            }}
             value={form.chain}
             onChange={handleChange}
             required
           >
-            <option value="">Select Chain</option>
+            <option value="" style={{ padding: '8px', fontSize: '14px' }}>Select Chain</option>
             {chains.map(chain => (
-              <option key={chain._id} value={chain._id}>{chain.name}</option>
+              <option key={chain._id} value={chain._id} style={{ padding: '8px', fontSize: '14px' }}>{chain.name}</option>
             ))}
           </TextField>
+          <TextField margin="normal" label="Description" name="description" fullWidth value={form.description} onChange={handleChange} />
+          <TextField margin="normal" label="Logo URL" name="logo" fullWidth value={form.logo} onChange={handleChange} />
           {error && <Typography color="error" sx={{ mt: 1 }}>{error}</Typography>}
         </DialogContent>
         <DialogActions>
@@ -397,8 +522,28 @@ function SectionsAdmin() {
         <DialogTitle>{editSection ? 'Edit Section' : 'Add Section'}</DialogTitle>
         <DialogContent>
           <TextField margin="normal" label="Name" name="name" fullWidth value={form.name} onChange={handleChange} autoFocus required />
-          <TextField margin="normal" label="Type" name="type" fullWidth select SelectProps={{ native: true }} value={form.type} onChange={handleChange} required>
-            <option value="faucet">Faucet</option>
+          <TextField 
+            margin="normal" 
+            label="Type" 
+            name="type" 
+            fullWidth 
+            select 
+            sx={{
+              '& .MuiSelect-select': {
+                padding: '12px 14px',
+                fontSize: '14px',
+                lineHeight: '1.5'
+              }
+            }}
+            SelectProps={{ 
+              native: true,
+              style: { fontSize: '14px', padding: '8px' }
+            }} 
+            value={form.type} 
+            onChange={handleChange} 
+            required
+          >
+            <option value="faucet" style={{ padding: '8px', fontSize: '14px' }}>Faucet</option>
           </TextField>
           <TextField margin="normal" label="Description" name="description" fullWidth value={form.description} onChange={handleChange} />
           <TextField margin="normal" label="Order" name="order" type="number" fullWidth value={form.order} onChange={handleChange} />
@@ -527,12 +672,32 @@ function DailyTasksAdmin() {
         <DialogTitle>{editTask ? 'Edit Daily Task' : 'Add Daily Task'}</DialogTitle>
         <DialogContent>
           <TextField margin="normal" label="Name" name="name" fullWidth value={form.name} onChange={handleChange} autoFocus required />
-          <TextField margin="normal" label="Type" name="type" fullWidth select SelectProps={{ native: true }} value={form.type} onChange={handleChange} required>
-            <option value="">Select Type</option>
-            <option value="checkin">Check-in</option>
-            <option value="swap">Daily Swap</option>
-            <option value="quest">Quest</option>
-            <option value="faucet">Faucet</option>
+          <TextField 
+            margin="normal" 
+            label="Type" 
+            name="type" 
+            fullWidth 
+            select 
+            sx={{
+              '& .MuiSelect-select': {
+                padding: '12px 14px',
+                fontSize: '14px',
+                lineHeight: '1.5'
+              }
+            }}
+            SelectProps={{ 
+              native: true,
+              style: { fontSize: '14px', padding: '8px' }
+            }} 
+            value={form.type} 
+            onChange={handleChange} 
+            required
+          >
+            <option value="" style={{ padding: '8px', fontSize: '14px' }}>Select Type</option>
+            <option value="checkin" style={{ padding: '8px', fontSize: '14px' }}>Check-in</option>
+            <option value="swap" style={{ padding: '8px', fontSize: '14px' }}>Daily Swap</option>
+            <option value="quest" style={{ padding: '8px', fontSize: '14px' }}>Quest</option>
+            <option value="faucet" style={{ padding: '8px', fontSize: '14px' }}>Faucet</option>
           </TextField>
           <TextField margin="normal" label="URL" name="url" fullWidth value={form.url} onChange={handleChange} required />
           <TextField margin="normal" label="Description" name="description" fullWidth value={form.description} onChange={handleChange} />
@@ -543,13 +708,23 @@ function DailyTasksAdmin() {
             name="sectionId"
             fullWidth
             select
-            SelectProps={{ native: true }}
+            sx={{
+              '& .MuiSelect-select': {
+                padding: '12px 14px',
+                fontSize: '14px',
+                lineHeight: '1.5'
+              }
+            }}
+            SelectProps={{ 
+              native: true,
+              style: { fontSize: '14px', padding: '8px' }
+            }}
             value={form.sectionId}
             onChange={handleChange}
           >
-            <option value="">Select Section (Optional)</option>
+            <option value="" style={{ padding: '8px', fontSize: '14px' }}>Select Section (Optional)</option>
             {sections.map(section => (
-              <option key={section._id} value={section._id}>{section.name}</option>
+              <option key={section._id} value={section._id} style={{ padding: '8px', fontSize: '14px' }}>{section.name}</option>
             ))}
           </TextField>
           {error && <Typography color="error" sx={{ mt: 1 }}>{error}</Typography>}
