@@ -23,23 +23,28 @@ const connectDB = async () => {
 
   try {
     const mongoUri = process.env.MONGO_URI;
+    console.log('Checking MONGO_URI:', mongoUri ? 'Set' : 'Not set');
+    
     if (!mongoUri) {
       console.error('MONGO_URI environment variable is not set');
+      console.log('Available environment variables:', Object.keys(process.env));
       throw new Error('MONGO_URI is required');
     }
 
+    console.log('Attempting to connect to MongoDB...');
     await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 10000, // Increased timeout
       socketTimeoutMS: 45000,
     });
     
     isConnected = true;
     console.log('MongoDB connected successfully');
   } catch (err) {
-    console.error('MongoDB connection error:', err);
-    // Don't exit process in serverless environment
+    console.error('MongoDB connection error:', err.message);
+    console.error('Full error:', err);
+    // Don't exit process in production
     isConnected = false;
   }
 };
@@ -47,6 +52,7 @@ const connectDB = async () => {
 // Health check endpoint
 app.get('/', async (req, res) => {
   try {
+    console.log('Health check requested');
     await connectDB();
     res.json({ 
       message: 'DeFi Explorer API running',
@@ -55,6 +61,7 @@ app.get('/', async (req, res) => {
       timestamp: new Date().toISOString()
     });
   } catch (error) {
+    console.error('Health check error:', error);
     res.status(500).json({
       message: 'API is running but MongoDB connection failed',
       status: 'warning',
@@ -81,6 +88,7 @@ app.use('/api/*', async (req, res, next) => {
 
 // Load and use routes
 try {
+  console.log('Loading routes...');
   const adminRoutes = require('./routes/admin');
   const chainRoutes = require('./routes/chain');
   const dappRoutes = require('./routes/dapp');
@@ -97,13 +105,14 @@ try {
   app.use('/api/airdropevents', airdropEventRoutes);
   app.use('/api/quests', questRoutes);
   app.use('/api/sections', sectionRoutes);
+  console.log('Routes loaded successfully');
 } catch (error) {
   console.error('Error loading routes:', error);
 }
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error('Error middleware caught:', err.stack);
   res.status(500).json({ 
     message: 'Something went wrong!',
     error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
@@ -121,10 +130,10 @@ app.use('*', (req, res) => {
 // For Vercel deployment
 module.exports = app;
 
-// For local development
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
+// For local development and Render
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  console.log('Environment:', process.env.NODE_ENV || 'development');
+  console.log('MONGO_URI set:', !!process.env.MONGO_URI);
+});
