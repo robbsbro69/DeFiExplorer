@@ -101,7 +101,7 @@ try {
   const questRoutes = require('./routes/quest');
   const sectionRoutes = require('./routes/section');
 
-  // API Routes
+  // API Routes - Force deployment update
   app.use('/api/admin', adminRoutes);
   app.use('/api/chains', chainRoutes);
   app.use('/api/dapps', dappRoutes);
