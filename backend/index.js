@@ -2,13 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const adminRoutes = require('./routes/admin');
-const chainRoutes = require('./routes/chain');
-const dappRoutes = require('./routes/dapp');
-const dailyTaskRoutes = require('./routes/dailytask');
-const airdropEventRoutes = require('./routes/airdropevent');
-const questRoutes = require('./routes/quest');
-const sectionRoutes = require('./routes/section');
 
 const app = express();
 
@@ -19,39 +12,155 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// MongoDB Connection
+// MongoDB Connection with better error handling
+let isConnected = false;
+
 const connectDB = async () => {
+  if (isConnected) {
+    console.log('MongoDB already connected');
+    return;
+  }
+
   try {
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/defiexplorer', {
+    const mongoUri = process.env.MONGO_URI;
+    if (!mongoUri) {
+      console.error('MONGO_URI environment variable is not set');
+      throw new Error('MONGO_URI is required');
+    }
+
+    await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
     });
+    
+    isConnected = true;
     console.log('MongoDB connected successfully');
   } catch (err) {
     console.error('MongoDB connection error:', err);
-    process.exit(1);
+    // Don't exit process in serverless environment
+    isConnected = false;
   }
 };
 
-// Connect to MongoDB
-connectDB();
+// Lazy load routes to avoid issues if MongoDB is not connected
+let adminRoutes, chainRoutes, dappRoutes, dailyTaskRoutes, airdropEventRoutes, questRoutes, sectionRoutes;
 
-// API Routes placeholder
-app.get('/', (req, res) => {
+const loadRoutes = async () => {
+  try {
+    adminRoutes = require('./routes/admin');
+    chainRoutes = require('./routes/chain');
+    dappRoutes = require('./routes/dapp');
+    dailyTaskRoutes = require('./routes/dailytask');
+    airdropEventRoutes = require('./routes/airdropevent');
+    questRoutes = require('./routes/quest');
+    sectionRoutes = require('./routes/section');
+  } catch (error) {
+    console.error('Error loading routes:', error);
+  }
+};
+
+// Health check endpoint
+app.get('/', async (req, res) => {
+  try {
+    await connectDB();
     res.json({ 
       message: 'DeFi Explorer API running',
       status: 'success',
+      mongoConnected: isConnected,
       timestamp: new Date().toISOString()
     });
+  } catch (error) {
+    res.status(500).json({
+      message: 'API is running but MongoDB connection failed',
+      status: 'warning',
+      mongoConnected: isConnected,
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
 });
 
-app.use('/api/admin', adminRoutes);
-app.use('/api/chains', chainRoutes);
-app.use('/api/dapps', dappRoutes);
-app.use('/api/dailytasks', dailyTaskRoutes);
-app.use('/api/airdropevents', airdropEventRoutes);
-app.use('/api/quests', questRoutes);
-app.use('/api/sections', sectionRoutes);
+// Initialize routes with connection check
+app.use('/api/*', async (req, res, next) => {
+  try {
+    await connectDB();
+    await loadRoutes();
+    
+    if (!isConnected) {
+      return res.status(503).json({
+        message: 'Database connection not available',
+        status: 'error'
+      });
+    }
+    
+    next();
+  } catch (error) {
+    console.error('Route initialization error:', error);
+    res.status(500).json({
+      message: 'Service temporarily unavailable',
+      status: 'error'
+    });
+  }
+});
+
+// API Routes
+app.use('/api/admin', (req, res, next) => {
+  if (adminRoutes) {
+    adminRoutes(req, res, next);
+  } else {
+    res.status(503).json({ message: 'Admin routes not loaded' });
+  }
+});
+
+app.use('/api/chains', (req, res, next) => {
+  if (chainRoutes) {
+    chainRoutes(req, res, next);
+  } else {
+    res.status(503).json({ message: 'Chain routes not loaded' });
+  }
+});
+
+app.use('/api/dapps', (req, res, next) => {
+  if (dappRoutes) {
+    dappRoutes(req, res, next);
+  } else {
+    res.status(503).json({ message: 'Dapp routes not loaded' });
+  }
+});
+
+app.use('/api/dailytasks', (req, res, next) => {
+  if (dailyTaskRoutes) {
+    dailyTaskRoutes(req, res, next);
+  } else {
+    res.status(503).json({ message: 'Daily task routes not loaded' });
+  }
+});
+
+app.use('/api/airdropevents', (req, res, next) => {
+  if (airdropEventRoutes) {
+    airdropEventRoutes(req, res, next);
+  } else {
+    res.status(503).json({ message: 'Airdrop event routes not loaded' });
+  }
+});
+
+app.use('/api/quests', (req, res, next) => {
+  if (questRoutes) {
+    questRoutes(req, res, next);
+  } else {
+    res.status(503).json({ message: 'Quest routes not loaded' });
+  }
+});
+
+app.use('/api/sections', (req, res, next) => {
+  if (sectionRoutes) {
+    sectionRoutes(req, res, next);
+  } else {
+    res.status(503).json({ message: 'Section routes not loaded' });
+  }
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
