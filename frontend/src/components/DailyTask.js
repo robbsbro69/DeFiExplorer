@@ -63,17 +63,7 @@ function TaskSection({ tasks, type }) {
           border: '1px solid rgba(59, 130, 246, 0.2)',
           backdropFilter: 'blur(10px)',
           position: 'relative',
-          overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '2px',
-            background: 'linear-gradient(90deg, #3b82f6, #1d4ed8)',
-            opacity: 0.8
-          }
+          overflow: 'hidden'
         }}>
           <FormControl size="small" sx={{ minWidth: 180, zIndex: 2 }}>
             <InputLabel id="faucet-section-label">Faucet Section</InputLabel>
@@ -112,20 +102,6 @@ function TaskSection({ tasks, type }) {
                 '&:hover': {
                   boxShadow: '0 16px 48px 0 rgba(59,130,246,0.18)',
                   border: '1.5px solid #3b82f6',
-                },
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: '3px',
-                  background: 'linear-gradient(90deg, #3b82f6, #1d4ed8)',
-                  opacity: 0,
-                  transition: 'opacity 0.3s ease-in-out'
-                },
-                '&:hover::before': {
-                  opacity: 1
                 }
               }}>
                 <Box className="card-glow" sx={{
@@ -272,20 +248,6 @@ function TaskSection({ tasks, type }) {
               '& .card-glow': {
                 opacity: 1
               }
-            },
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: '3px',
-              background: 'linear-gradient(90deg, #3b82f6, #1d4ed8)',
-              opacity: 0,
-              transition: 'opacity 0.3s ease-in-out'
-            },
-            '&:hover::before': {
-              opacity: 1
             }
           }}>
             <Box className="card-glow" sx={{
@@ -424,9 +386,7 @@ export default function DailyTask() {
           variant="h3" 
           sx={{ 
             fontWeight: 700,
-            background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
+            color: '#ffffff',
             mb: 2,
             letterSpacing: '-0.02em',
             fontSize: '2.5rem'
@@ -436,7 +396,7 @@ export default function DailyTask() {
         </Typography>
         <Typography 
           variant="body1" 
-          color="text.secondary" 
+          color="#cccccc" 
           sx={{ mb: 4, fontSize: '1.1rem' }}
         >
           Complete daily tasks to earn rewards and maximize your DeFi experience
@@ -456,12 +416,13 @@ export default function DailyTask() {
               fontWeight: 600,
               textTransform: 'none',
               minHeight: 48,
+              color: '#ffffff',
               '&.Mui-selected': {
-                color: 'primary.main'
+                color: '#ffffff'
               }
             },
             '& .MuiTabs-indicator': {
-              backgroundColor: 'primary.main'
+              backgroundColor: '#ffffff'
             }
           }}
         >
@@ -487,7 +448,7 @@ export default function DailyTask() {
           alignItems: 'center', 
           minHeight: 400 
         }}>
-          <CircularProgress size={60} sx={{ color: 'primary.main' }} />
+          <CircularProgress size={60} sx={{ color: '#ffffff' }} />
         </Box>
       ) : (
         <TaskSection tasks={tasks} type={tab} />

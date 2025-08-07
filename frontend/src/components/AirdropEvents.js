@@ -37,18 +37,16 @@ export default function AirdropEvents() {
         alignItems: 'center',
         mb: 4,
         p: 3,
-        background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%)',
+        background: '#111111',
         borderRadius: 2,
-        border: '1px solid rgba(139, 92, 246, 0.1)'
+        border: '1px solid #333333'
       }}>
         <Box>
           <Typography 
             variant="h3" 
             sx={{ 
               fontWeight: 700,
-              background: 'linear-gradient(135deg, #8b5cf6, #f59e0b)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              color: '#ffffff',
               mb: 1,
               letterSpacing: '-0.02em'
             }}
@@ -57,7 +55,7 @@ export default function AirdropEvents() {
           </Typography>
           <Typography 
             variant="body1" 
-            color="text.secondary"
+            color="#cccccc"
             sx={{ fontSize: '1.1rem' }}
           >
             Discover the latest airdrop campaigns and token distribution events
@@ -69,8 +67,8 @@ export default function AirdropEvents() {
           size="medium"
           icon={<FlightTakeoff />}
           sx={{ 
-            background: 'rgba(139, 92, 246, 0.2)',
-            color: 'primary.main',
+            background: '#333333',
+            color: '#ffffff',
             fontWeight: 600,
             fontSize: '1rem'
           }}
@@ -84,21 +82,21 @@ export default function AirdropEvents() {
           alignItems: 'center', 
           minHeight: 400 
         }}>
-          <CircularProgress size={60} sx={{ color: 'primary.main' }} />
+          <CircularProgress size={60} sx={{ color: '#ffffff' }} />
         </Box>
       ) : events.length === 0 ? (
         <Box sx={{ 
           textAlign: 'center', 
           py: 8,
-          background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%)',
+          background: '#111111',
           borderRadius: 2,
-          border: '1px solid rgba(139, 92, 246, 0.1)'
+          border: '1px solid #333333'
         }}>
-          <FlightTakeoff sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
-          <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, mb: 1 }}>
+          <FlightTakeoff sx={{ fontSize: 64, color: '#cccccc', mb: 2 }} />
+          <Typography variant="h6" color="#cccccc" sx={{ fontWeight: 600, mb: 1 }}>
             No airdrop events available
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="#cccccc">
             Check back later for new airdrop campaigns!
           </Typography>
         </Box>
@@ -124,20 +122,6 @@ export default function AirdropEvents() {
                   '& .card-glow': {
                     opacity: 1
                   }
-                },
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: '2px',
-                  background: 'linear-gradient(90deg, #8b5cf6, #f59e0b)',
-                  opacity: 0,
-                  transition: 'opacity 0.3s ease-in-out'
-                },
-                '&:hover::before': {
-                  opacity: 1
                 }
               }}>
                 <Box className="card-glow" sx={{
@@ -272,12 +256,12 @@ export default function AirdropEvents() {
                         fontSize: '0.9rem',
                         letterSpacing: '0.025em',
                         width: '100%',
-                        background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                        background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
                         color: 'white',
                         '&:hover': {
-                          background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
+                          background: 'linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%)',
                           transform: 'translateY(-2px)',
-                          boxShadow: '0 10px 20px -5px rgba(139, 92, 246, 0.3)'
+                          boxShadow: '0 10px 20px -5px rgba(59, 130, 246, 0.4)'
                         }
                       }}
                       fullWidth

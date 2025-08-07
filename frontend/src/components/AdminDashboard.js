@@ -889,14 +889,14 @@ export default function AdminDashboard() {
   return (
     <Box sx={{ width: '100%', mt: 2 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, background: 'linear-gradient(135deg, #3b82f6, #f59e0b)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, color: '#ffffff' }}>
           Admin Dashboard
         </Typography>
         <Button 
           variant="outlined" 
           color="error" 
           onClick={handleLogout}
-          sx={{ borderRadius: 2 }}
+          sx={{ borderRadius: 2, borderColor: '#ffffff', color: '#ffffff', '&:hover': { borderColor: '#ffffff', backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}
         >
           Logout
         </Button>
@@ -908,19 +908,19 @@ export default function AdminDashboard() {
         indicatorColor="primary"
         variant="scrollable"
         scrollButtons="auto"
-        sx={{ mb: 2 }}
+        sx={{ mb: 2, '& .MuiTab-root': { color: '#ffffff' }, '& .MuiTabs-indicator': { backgroundColor: '#ffffff' } }}
       >
         {sections.map((section) => (
           <Tab key={section.value} label={section.label} value={section.value} />
         ))}
       </Tabs>
-      <Box sx={{ p: 2, minHeight: 200, bgcolor: 'background.paper', borderRadius: 2 }}>
+      <Box sx={{ p: 2, minHeight: 200, bgcolor: '#111111', borderRadius: 2, border: '1px solid #333333' }}>
         {tab === 'chains' ? <ChainsAdmin /> : tab === 'dapps' ? <DappsAdmin /> : tab === 'dailytasks' ? <DailyTasksAdmin /> : tab === 'airdrops' ? <AirdropEventsAdmin /> : tab === 'sections' ? <SectionsAdmin /> : (
           <>
-            <Typography variant="h6" sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 2, color: '#ffffff' }}>
               {sections.find(s => s.value === tab).label}
             </Typography>
-            <Typography color="text.secondary">
+            <Typography color="#cccccc">
               {`(CRUD interface for ${tab} will appear here.)`}
             </Typography>
           </>

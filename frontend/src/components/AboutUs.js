@@ -61,27 +61,13 @@ export default function AboutUs() {
       <Box sx={{ 
         textAlign: 'center',
         mb: 6,
-        position: 'relative',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '300px',
-          height: '300px',
-          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%)',
-          borderRadius: '50%',
-          zIndex: -1
-        }
+        position: 'relative'
       }}>
         <Typography 
           variant="h2" 
           sx={{ 
             fontWeight: 700,
-            background: 'linear-gradient(135deg, #3b82f6, #f59e0b)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
+            color: '#ffffff',
             mb: 3,
             letterSpacing: '-0.02em',
             fontSize: { xs: '2.5rem', md: '3.5rem' }
@@ -91,7 +77,7 @@ export default function AboutUs() {
         </Typography>
         <Typography 
           variant="h6" 
-          color="text.secondary"
+          color="#cccccc"
           sx={{ 
             maxWidth: 800, 
             mx: 'auto',
@@ -107,31 +93,19 @@ export default function AboutUs() {
       {/* Mission Section */}
       <Box sx={{ mb: 8 }}>
         <Card sx={{
-          background: 'linear-gradient(135deg, rgba(26, 31, 46, 0.8) 0%, rgba(30, 41, 59, 0.8) 100%)',
+          background: '#111111',
           backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(59, 130, 246, 0.15)',
+          border: '1px solid #333333',
           borderRadius: 4,
           p: 4,
           position: 'relative',
-          overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '3px',
-            background: 'linear-gradient(90deg, #3b82f6, #f59e0b)',
-            opacity: 0.8
-          }
+          overflow: 'hidden'
         }}>
           <Typography 
             variant="h3" 
             sx={{ 
               fontWeight: 700,
-              background: 'linear-gradient(135deg, #3b82f6, #f59e0b)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              color: '#ffffff',
               mb: 3,
               letterSpacing: '-0.02em'
             }}
@@ -140,7 +114,7 @@ export default function AboutUs() {
           </Typography>
           <Typography 
             variant="body1" 
-            color="text.secondary"
+            color="#cccccc"
             sx={{ 
               fontSize: '1.1rem',
               lineHeight: 1.7,
@@ -151,7 +125,7 @@ export default function AboutUs() {
           </Typography>
           <Typography 
             variant="body1" 
-            color="text.secondary"
+            color="#cccccc"
             sx={{ 
               fontSize: '1.1rem',
               lineHeight: 1.7
@@ -168,9 +142,7 @@ export default function AboutUs() {
           variant="h3" 
           sx={{ 
             fontWeight: 700,
-            background: 'linear-gradient(135deg, #3b82f6, #f59e0b)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
+            color: '#ffffff',
             mb: 4,
             textAlign: 'center',
             letterSpacing: '-0.02em'
@@ -179,23 +151,13 @@ export default function AboutUs() {
           Get In Touch
         </Typography>
         <Card sx={{
-          background: 'linear-gradient(135deg, rgba(26, 31, 46, 0.8) 0%, rgba(30, 41, 59, 0.8) 100%)',
+          background: '#111111',
           backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(59, 130, 246, 0.15)',
+          border: '1px solid #333333',
           borderRadius: 4,
           p: 4,
           position: 'relative',
-          overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '3px',
-            background: 'linear-gradient(90deg, #3b82f6, #f59e0b)',
-            opacity: 0.8
-          }
+          overflow: 'hidden'
         }}>
           <Grid container spacing={4}>
             {contactLinks.map((link, index) => (
@@ -206,10 +168,10 @@ export default function AboutUs() {
                   gap: 2,
                   p: 2,
                   borderRadius: 2,
-                  background: 'rgba(59, 130, 246, 0.1)',
+                  background: '#333333',
                   transition: 'all 0.3s ease-in-out',
                   '&:hover': {
-                    background: 'rgba(59, 130, 246, 0.2)',
+                    background: '#444444',
                     transform: 'translateY(-2px)'
                   }
                 }}>

@@ -43,12 +43,12 @@ export default function AdminLogin({ onLogin }) {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 8 }}>
-      <Paper elevation={4} sx={{ p: 4, maxWidth: 360, width: '100%' }}>
+      <Paper elevation={4} sx={{ p: 4, maxWidth: 360, width: '100%', bgcolor: '#111111', border: '1px solid #333333' }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: '#ffffff', color: '#000000' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5" sx={{ fontWeight: 700 }}>
+          <Typography component="h1" variant="h5" sx={{ fontWeight: 700, color: '#ffffff' }}>
             Admin Login
           </Typography>
         </Box>
@@ -63,6 +63,28 @@ export default function AdminLogin({ onLogin }) {
             value={username}
             onChange={e => setUsername(e.target.value)}
             disabled={loading}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: '#333333',
+                },
+                '&:hover fieldset': {
+                  borderColor: '#ffffff',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#ffffff',
+                },
+              },
+              '& .MuiInputLabel-root': {
+                color: '#cccccc',
+                '&.Mui-focused': {
+                  color: '#ffffff',
+                },
+              },
+              '& .MuiInputBase-input': {
+                color: '#ffffff',
+              },
+            }}
           />
           <TextField
             margin="normal"
@@ -74,9 +96,31 @@ export default function AdminLogin({ onLogin }) {
             value={password}
             onChange={e => setPassword(e.target.value)}
             disabled={loading}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: '#333333',
+                },
+                '&:hover fieldset': {
+                  borderColor: '#ffffff',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#ffffff',
+                },
+              },
+              '& .MuiInputLabel-root': {
+                color: '#cccccc',
+                '&.Mui-focused': {
+                  color: '#ffffff',
+                },
+              },
+              '& .MuiInputBase-input': {
+                color: '#ffffff',
+              },
+            }}
           />
           {error && (
-            <Typography color="error" sx={{ mt: 1, fontSize: 14 }}>
+            <Typography color="error" sx={{ mt: 1, fontSize: 14, color: '#ffffff' }}>
               {error}
             </Typography>
           )}
@@ -85,7 +129,7 @@ export default function AdminLogin({ onLogin }) {
             fullWidth
             variant="contained"
             color="primary"
-            sx={{ mt: 3, mb: 2, fontWeight: 600, borderRadius: 2 }}
+            sx={{ mt: 3, mb: 2, fontWeight: 600, borderRadius: 2, bgcolor: '#ffffff', color: '#000000', '&:hover': { bgcolor: '#e0e0e0' } }}
             disabled={loading}
             startIcon={loading ? <CircularProgress size={20} /> : null}
           >
